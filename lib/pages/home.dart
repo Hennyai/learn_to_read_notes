@@ -1,0 +1,84 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:learn_to_read_notes/pages/setting.dart';
+import 'package:learn_to_read_notes/models/choose_card.dart';
+
+//Danh sách message
+final Map<String, Map<String, String>> docMessages = {
+  'en': {
+    'play': 'Start training!',
+    'play explain': 'Choose exercise',
+    'book' : 'Read music theories',
+    'book explain' : 'Learn/Review the music theory used in this program',
+  },
+  'vi': {
+    'play': 'Bắt đầu tập luyện!',
+    'play explain': 'Chọn bài tập',
+    'book' : 'Đọc nhạc lý',
+    'book explain' : 'Học/ôn lại những nhạc lý sử dụng trong phần mềm'
+  },
+};
+
+
+
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    //Message theo ngôn ngữ hiện tại
+    final Map<String, String>? messages = docMessages[globals.language];
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: globals.color('appbar'),
+        title:
+          Text('Note Anki', style: TextStyle(color: globals.color('text'), fontSize: 40, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              showDialog(context: context, builder: (BuildContext context){return Setting();}).then((value) => setState(() {}));
+            },
+            color: globals.color('icon 1'),
+          ),
+        ],
+      ),
+      backgroundColor: globals.color('background'),
+      body: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ColorFiltered(
+                  colorFilter: ColorFilter.mode(globals.color('background pattern') as Color, BlendMode.srcIn),
+                  child: Image.asset('assets/images/pattern/marumarumaru.png', height: 300, repeat: ImageRepeat.repeat,)
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: ()=>Navigator.pushReplacementNamed(context, '/music_reading'),
+                    child: ChooseCard(CupertinoIcons.arrow_right_circle_fill, messages!['play'] as String, messages!['play explain'] as String, 'icon 1')
+                  )
+              ),
+              Expanded(child: ChooseCard(CupertinoIcons.book, messages!['book'] as String, messages!['book explain'] as String, 'icon 1' )),
+              SizedBox(height: 20)
+            ],
+          ),
+        ]
+      ),
+    );
+  }
+}
