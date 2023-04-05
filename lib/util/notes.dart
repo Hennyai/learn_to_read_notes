@@ -52,6 +52,7 @@ String noteByNumber(int code, bool trebleClef){
     return pitchesBass[code];
 }
 
+
 List<String> randomNotes(bool trebleClef){
   final random = Random();
   List<String> notes = [];

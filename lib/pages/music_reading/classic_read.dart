@@ -8,6 +8,7 @@ import 'package:learn_to_read_notes/util/pitch_asset.dart';
 import 'package:piano/piano.dart';
 import 'dart:math';
 
+import '../../models/note_address.dart';
 import '../../models/sheet_music.dart';
 import '../../util/clef_asset.dart';
 
@@ -35,6 +36,10 @@ int checkChangeNumber = -1;
 String alert = '';
 Color alertColor = globals.color('card') as Color;
 
+List<failedNote> notesFailed = [];
+
+
+
 void newSheet(){
   trebleClef = randomClef();
   notes = randomNotes(trebleClef);
@@ -42,6 +47,27 @@ void newSheet(){
   alert = '';
   alertColor = globals.color('card') as Color;
 }
+
+void revisionSheet(){
+  
+}
+
+
+void checkFailed(noteAddress noteFailed){
+  bool contain = false;
+
+  for (var i = 0; i < notesFailed.length; i++) {
+    var e = notesFailed[i];
+    if (e.note.equals(noteFailed)) {
+      e.weight++;
+      contain = true;
+      break;
+    }
+  }
+
+  if(!contain)  notesFailed.add(failedNote(noteFailed, 1));
+}
+
 
 
 
@@ -135,7 +161,7 @@ class _ClassicReadState extends State<ClassicRead> {
           Expanded(
             flex: 4,
             child: InteractivePiano(
-              hideNoteNames: true,
+              hideNoteNames: false,
               hideScrollbar: true,
               naturalColor: Colors.white,
               accidentalColor: Colors.black,
@@ -155,10 +181,14 @@ class _ClassicReadState extends State<ClassicRead> {
                   print(compareNotes(noteName, getNoteName(scale, notes[notePosition])));
 
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
+                    //Correct:
                     noteColor[notePosition]++;
                     alert = getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('correct') as Color;
                   } else {
+                    //Incorrect
+                    checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
+                    print(notesFailed);
                     noteColor[notePosition]+=2;
                     alert = messages['alert']!+getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('incorrect') as Color;

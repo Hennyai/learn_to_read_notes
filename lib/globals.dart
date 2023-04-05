@@ -48,3 +48,10 @@ Color? color(String context){
   return theme[currentTheme]![context];
 }
 
+int clefHeight = 600;
+int clefWidth = 231;
+int scaleHeight = 600;
+int scaleWidth = 597;
+int noteHeight = 600;
+int noteWidth = 344;
+
