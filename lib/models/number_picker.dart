@@ -27,8 +27,9 @@ class _NumberPickerState extends State<NumberPicker> {
     Picker(
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(begin: 0, end: 9),
+        NumberPickerColumn(begin: 0, end: 9),
       ]),
-      selecteds: [globals.numberOfNotes],
+      selecteds: [globals.numberOfNotes ~/ 10, globals.numberOfNotes % 10],
       hideHeader: true,
       title: Text('Select a Number'),
       onConfirm: (picker, List<int> value) {
@@ -45,7 +46,7 @@ class _NumberPickerState extends State<NumberPicker> {
     messages = docMessages[globals.language];
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(11.0),
       child: Card(
         color: globals.color('card'),
         child: Container(

@@ -36,28 +36,76 @@ int checkChangeNumber = -1;
 String alert = '';
 Color alertColor = globals.color('card') as Color;
 
-List<failedNote> notesFailed = [];
+
+void randomOrRevision(){
+  int totalWeight = globals.randomSheetWeight;
+  globals.notesFailed.forEach((note) {
+    totalWeight+=note.weight;
+  });
+  int randomNumber = random.nextInt(totalWeight) + 1;
+  print(totalWeight);
+  print(globals.randomSheetWeight);
+
+  randomNumber-=globals.randomSheetWeight;
+  if(randomNumber<=0){
+    return randomSheet();
+  } else {
+    return revisionSheet();
+  }
 
 
+}
 
-void newSheet(){
+void randomSheet(){
   trebleClef = randomClef();
   notes = randomNotes(trebleClef);
   scale = scaleByNumber(random.nextInt(14));
   alert = '';
   alertColor = globals.color('card') as Color;
+  noteColor = generateNoteColor();
 }
 
 void revisionSheet(){
-  
+  int totalWeight=0;
+  globals.notesFailed.forEach((note) {totalWeight+=note.weight;});
+  int randomNumber = random.nextInt(totalWeight) + 1;
+
+
+  noteAddress? selectedNote;
+
+  for (int i = 0; i < globals.notesFailed.length; i++) {
+    randomNumber -= globals.notesFailed[i].weight;
+
+    if (randomNumber <= 0) {
+      selectedNote = globals.notesFailed[i].note;
+      break;
+    }
+  }
+
+  print('Selected note: $selectedNote');
+
+  if(selectedNote!=null) {
+    trebleClef = selectedNote.trebleClef;
+    scale = selectedNote.scale;
+    notes = randomNotes(trebleClef);
+    notes[0] = selectedNote.noteName;
+    alert = '';
+    alertColor = globals.color('card') as Color;
+    noteColor = generateNoteColor();
+    noteColor[0]=3;
+  } else {
+    randomSheet();
+  }
+
+  print("Called a revision sheet");
 }
 
 
 void checkFailed(noteAddress noteFailed){
   bool contain = false;
 
-  for (var i = 0; i < notesFailed.length; i++) {
-    var e = notesFailed[i];
+  for (var i = 0; i < globals.notesFailed.length; i++) {
+    var e = globals.notesFailed[i];
     if (e.note.equals(noteFailed)) {
       e.weight++;
       contain = true;
@@ -65,7 +113,20 @@ void checkFailed(noteAddress noteFailed){
     }
   }
 
-  if(!contain)  notesFailed.add(failedNote(noteFailed, 1));
+  if(!contain)  globals.notesFailed.add(failedNote(noteFailed, 1));
+}
+
+void checkPassed(noteAddress notePassed){
+  for (var i = 0; i < globals.notesFailed.length; i++) {
+    var e = globals.notesFailed[i];
+    if (e.note.equals(notePassed)) {
+      if(e.weight>1){
+        e.weight--;
+      } else {
+        globals.notesFailed.removeAt(i);
+      }
+    }
+  }
 }
 
 
@@ -88,11 +149,11 @@ class _ClassicReadState extends State<ClassicRead> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = min(20, MediaQuery.of(context).size.height/20);
 
     if(notePosition > globals.numberOfNotes) {
-      newSheet();
+      randomOrRevision();
       notePosition = 0;
-      noteColor = generateNoteColor();
     };
 
 
@@ -119,9 +180,12 @@ class _ClassicReadState extends State<ClassicRead> {
               showDialog(context: context, builder: (BuildContext context){return Setting();}).then((value) => setState(() {
                 if (checkChangeNumber!=globals.numberOfNotes) {
                   checkChangeNumber=globals.numberOfNotes;
-                  newSheet();
+                  randomOrRevision();
                   notePosition = 0;
                   noteColor = generateNoteColor();
+                }
+                if(notePosition==0){
+                  alertColor = globals.color('card') as Color;
                 }
               }));
             },
@@ -134,7 +198,7 @@ class _ClassicReadState extends State<ClassicRead> {
         children: [
           Expanded(
             flex: 3,
-            child: SheetMusic(trebleClef, scale, notes, noteColor),
+            child: SheetMusic(trebleClef, scale, notes, noteColor, notePosition),
           ),
           Expanded(
             flex: 1,
@@ -149,7 +213,7 @@ class _ClassicReadState extends State<ClassicRead> {
                     Text(
                       alert,
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: fontSize,
                         color: Colors.grey[100]
                       ),
                     ),
@@ -161,7 +225,7 @@ class _ClassicReadState extends State<ClassicRead> {
           Expanded(
             flex: 4,
             child: InteractivePiano(
-              hideNoteNames: false,
+              hideNoteNames: globals.hideNoteNames,
               hideScrollbar: true,
               naturalColor: Colors.white,
               accidentalColor: Colors.black,
@@ -175,23 +239,26 @@ class _ClassicReadState extends State<ClassicRead> {
 
 
                 if(notePosition<globals.numberOfNotes){
-                  print(noteName);
-                  print(getNoteName(scale, notes[notePosition]));
+                  //print(noteName);
+                  //print(getNoteName(scale, notes[notePosition]));
 
-                  print(compareNotes(noteName, getNoteName(scale, notes[notePosition])));
+                  //print(compareNotes(noteName, getNoteName(scale, notes[notePosition])));
 
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
                     //Correct:
-                    noteColor[notePosition]++;
+                    checkPassed(noteAddress(trebleClef, scale, notes[notePosition]));
+                    noteColor[notePosition]=1;
                     alert = getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('correct') as Color;
+                    //print(globals.notesFailed);
                   } else {
                     //Incorrect
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
-                    print(notesFailed);
-                    noteColor[notePosition]+=2;
+                    noteColor[notePosition]=2;
                     alert = messages['alert']!+getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('incorrect') as Color;
+                    //print(globals.notesFailed);
+                    //revisionSheet();
                   }
                 }
 

@@ -37,6 +37,7 @@ class _ChooseCardState extends State<ChooseCard> {
         margin: EdgeInsets.fromLTRB(margins, margins, margins, 0),
         child: Container(
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
             color: globals.color(cardColor),
             boxShadow: [
               BoxShadow(

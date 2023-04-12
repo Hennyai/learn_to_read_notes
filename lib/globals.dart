@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'models/note_address.dart';
+
+List<failedNote> notesFailed = [];
+bool hideNoteNames = true;
+
+bool advancedSettings = false;
+
 String language = 'en';
 String currentTheme = 'light';
 
 double sheetMusicSize = 100;
 
 int numberOfNotes = 3;
+
+int randomSheetWeight = 51;
 
 Map<String, Map<String, Color?>> theme = {
   'light' : {
@@ -24,6 +33,8 @@ Map<String, Map<String, Color?>> theme = {
     'button text' : Colors.white,
     'correct' : Colors.greenAccent[400],
     'incorrect' : Colors.redAccent,
+    'revision' : Colors.amberAccent,
+    'inactive slider' : Colors.deepPurple[50],
   },
   'dark' : {
     'appbar' : Colors.grey[900],
@@ -41,6 +52,8 @@ Map<String, Map<String, Color?>> theme = {
     'button text' : Colors.grey[900],
     'correct' : Colors.greenAccent[400],
     'incorrect' : Colors.redAccent,
+    'revision' : Colors.amberAccent,
+    'inactive slider' : Colors.grey[900],
   },
 };
 
