@@ -33,7 +33,8 @@ class _NumberPickerState extends State<NumberPicker> {
       hideHeader: true,
       title: Text('Select a Number'),
       onConfirm: (picker, List<int> value) {
-        globals.numberOfNotes = int.parse(value.join());
+        if(int.parse(value.join())>0) globals.numberOfNotes = int.parse(value.join());
+          else globals.numberOfNotes=1;
         setState(() {
           _selectedNumber = int.parse(value.join());
         });

@@ -39,6 +39,7 @@ dependencies:
   flutter_picker: ^2.1.0
   flutter_midi_command: ^0.4.11
   syncfusion_flutter_sliders: ^21.1.38
+  info_popup: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,11 @@ flutter:
   assets:
     - assets/
     - assets/images/pattern/marumarumaru.png
+
+    #Icon
+    - assets/icons/bass-clef.png
+    - assets/icons/treble-clef.png
+
     # Clef
     - assets/images/clef/treble_clef.png
     - assets/images/clef/bass_clef.png

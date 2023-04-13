@@ -1,21 +1,21 @@
+import 'dart:math';
+
 import 'package:tonic/tonic.dart';
+import 'package:learn_to_read_notes/globals.dart' as globals;
 
 List<String> scaleList = [
   "C Major",
-  "G Major",
-  "D Major",
-  "A Major",
-  "E Major",
-  "B Major",
-  "F# Major",
   "C# Major",
+  "D Major",
+  "D# Major",
+  "E Major",
   "F Major",
-  "Bb Major",
-  "Eb Major",
-  "Ab Major",
-  "Db Major",
-  "Gb Major",
-  "Cb Major",
+  "F# Major",
+  "G Major",
+  "G# Major",
+  "A Major",
+  "A# Major",
+  "B Major",
 ];
 
 enum PossibleScales {
@@ -149,4 +149,29 @@ Pitch? getScaleRoot(String scaleName) {
 
 String scaleByNumber(int code){
   return scaleList[code];
+}
+
+int scaleNameToNumber(String name){
+  return scaleList.indexOf(name);
+}
+
+bool scaleCheck(String name){
+  return globals.selectedScale[scaleNameToNumber(name)];
+}
+
+String randomScale(){
+  bool checkAllFalse = true;
+  for(int i = 0; i<globals.selectedScale.length;i++){
+    if(globals.selectedScale[i]){
+      checkAllFalse=false;
+      break;
+    }
+  }
+  if(checkAllFalse) return scaleByNumber(0);
+  final random = Random();
+  int chosenNumber = random.nextInt(12);
+  while(!globals.selectedScale[chosenNumber]){
+    chosenNumber = random.nextInt(12);
+  }
+  return scaleByNumber(chosenNumber);
 }

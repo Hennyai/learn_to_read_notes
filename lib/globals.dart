@@ -6,6 +6,23 @@ List<failedNote> notesFailed = [];
 bool hideNoteNames = true;
 
 bool advancedSettings = false;
+final List<bool> selectedClef = <bool>[
+  true,//treble
+  true];//bass
+List<bool> selectedScale = <bool>[
+  true, //C
+  true, //C#
+  true, //D
+  true, //D#
+  true, //E
+  true, //F
+  true, //F#
+  true, //G
+  true, //G#
+  true, //A
+  true, //A#
+  true, //B
+];
 
 String language = 'en';
 String currentTheme = 'light';
@@ -35,6 +52,7 @@ Map<String, Map<String, Color?>> theme = {
     'incorrect' : Colors.redAccent,
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.deepPurple[50],
+    'toggle border' : Colors.purple[700]
   },
   'dark' : {
     'appbar' : Colors.grey[900],
@@ -54,6 +72,7 @@ Map<String, Map<String, Color?>> theme = {
     'incorrect' : Colors.redAccent,
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.grey[900],
+    'toggle border' : Colors.grey[850]
   },
 };
 

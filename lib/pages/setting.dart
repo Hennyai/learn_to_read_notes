@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:info_popup/info_popup.dart';
 import 'package:learn_to_read_notes/globals.dart' as globals;
 
 import 'package:learn_to_read_notes/models/choose_card.dart';
@@ -23,7 +24,10 @@ final Map<String, Map<String, String>> docMessages = {
     'hide note explain' : "Hide the C3, C#3, D3... on the keys",
     'show note explain' : "Show the C3, C#3, D3... on the keys",
     'advanced' : 'Advanced',
-    'random weight' : "Random music sheet's weight"
+    'random weight' : "Random music sheet's weight",
+    'random weight explain' : "The weight slider allows you to adjust the balance between generating challenging, completely random music sheets and generating music sheets that target areas where you need to improve.",
+    'included clef' : 'Included Clefs:',
+    'included scale' : 'Included Scales:'
   },
   'vi': {
     'title': 'Cài đặt',
@@ -38,12 +42,30 @@ final Map<String, Map<String, String>> docMessages = {
     'hide note explain' : "Ẩn những tên C3, C#3, D3... trên phím đàn",
     'show note explain' : "Hiện những tên C3, C#3, D3... trên phím đàn",
     'advanced' : 'Nâng cao',
-    'random weight' : 'Trọng số random khung nhạc'
+    'random weight' : 'Trọng số random khung nhạc',
+    'random weight explain' : "Thanh trượt trọng số cho phép bạn điều chỉnh cân bằng giữa việc tạo ra các sheet nhạc ngẫu nhiên và các sheet nhạc hướng đến những chỗ mà bạn cần cải thiện.",
+    'included clef' : 'Bao gồm các khóa:',
+    'included scale' : 'Bao gồm các âm giai:'
   },
 };
 
 //Message theo ngôn ngữ hiện tại
 Map<String, String>? messages = docMessages[globals.language];
+
+List<Widget> scaleList= <Widget>[
+  Text('C'),
+  Text('C#'),
+  Text('D'),
+  Text('D#'),
+  Text('E'),
+  Text('F'),
+  Text('F#'),
+  Text('G'),
+  Text('G#'),
+  Text('A'),
+  Text('A#'),
+  Text('B'),
+];
 
 
 class Setting extends StatefulWidget {
@@ -56,9 +78,7 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
 
   void switchNoteNames(){
-    if(globals.hideNoteNames) globals.hideNoteNames=false;
-      else globals.hideNoteNames=true;
-    setState(() {});
+    setState(() {globals.hideNoteNames=!globals.hideNoteNames;});
   }
   void switchTheme(){
     if(globals.currentTheme == 'dark') globals.currentTheme = 'light';
@@ -71,9 +91,16 @@ class _SettingState extends State<Setting> {
     setState(() {});
   }
   void switchAdvanced(){
-    if(globals.advancedSettings) globals.advancedSettings=false;
-      else globals.advancedSettings=true;
-    setState(() {});
+    setState(() {globals.advancedSettings=!globals.advancedSettings;});
+  }
+
+  Color toggleBackgroundColor(bool check){
+    if(check) return globals.color('button') as Color;
+    return globals.color('button text') as Color;
+  }
+  Color toggleForegroundColor(bool check){
+    if(check) return globals.color('button text') as Color;
+    return globals.color('button') as Color;
   }
 
   @override
@@ -175,17 +202,52 @@ class _SettingState extends State<Setting> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Text(
-                                      messages!["random weight"] as String,
-                                      style: TextStyle(
-                                        color: globals.color("text")
-                                      ),
+                                    padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            messages!["random weight"] as String,
+                                            style: TextStyle(
+                                              color: globals.color("text")
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              InfoPopupWidget(
+                                                contentTitle: messages!['random weight explain'] as String,
+                                                arrowTheme: InfoPopupArrowTheme(
+                                                  color: globals.color('button') as Color,
+                                                  arrowDirection: ArrowDirection.up,
+                                                ),
+                                                contentTheme: InfoPopupContentTheme(
+                                                  infoContainerBackgroundColor: globals.color('card') as Color,
+                                                  infoTextStyle: TextStyle(color: globals.color('text') as Color),
+                                                  contentPadding: const EdgeInsets.all(8),
+                                                  contentBorderRadius: BorderRadius.all(Radius.circular(10)),
+                                                  infoTextAlign: TextAlign.center,
+                                                ),
+                                                dismissTriggerBehavior: PopupDismissTriggerBehavior.onTapArea,
+                                                areaBackgroundColor: Colors.transparent,
+                                                indicatorOffset: Offset.zero,
+                                                contentOffset: Offset.zero,
+                                                child: Icon(
+                                                  Icons.info,
+                                                  color: globals.color('button') as Color,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SfSlider(
                                     min: 0.0,
-                                    max: 300.0,
+                                    max: 500.0,
                                     value: globals.randomSheetWeight.toDouble()-1,
                                     interval: 50,
                                     showTicks: true,
@@ -207,6 +269,7 @@ class _SettingState extends State<Setting> {
                         ),
                       ),
                       SizedBox(height: 10,),
+                      //Included clef
                       Padding(
                         padding: const EdgeInsets.fromLTRB(11, 0, 11, 0),
                         child: Card(
@@ -224,40 +287,177 @@ class _SettingState extends State<Setting> {
                                 ),
                               ],
                             ),
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(4, 4, 0, 4),
-                                      child: Card(
-                                        color: Colors.red,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                                "Treble Clef"
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                  child: Text(
+                                      messages!['included clef'] as String,
+                                    style: TextStyle(
+                                      color: globals.color('text'),
+                                    ),
+                                  ),
                                 ),
-                                Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 4, 4, 4),
-                                      child: Card(
-                                        color: Colors.red,
+                                Row(
+                                  children: [
+                                    Expanded(
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                                "Bass Clef"
+                                          padding: EdgeInsets.fromLTRB(8, 8, 4, 8),
+                                          child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              side: MaterialStateProperty.resolveWith<BorderSide>(
+                                                    (Set<MaterialState> states) {
+                                                  return BorderSide(
+                                                    color: globals.color('button') as Color,
+                                                    width: 2.0,
+                                                  );
+                                                },
+                                              ),
+                                              backgroundColor: MaterialStateProperty.all<Color>(toggleBackgroundColor(globals.selectedClef[0])),
+                                            ),
+                                            onPressed: (){
+                                              setState(() {
+                                                if(globals.selectedClef[1]) globals.selectedClef[0]=!globals.selectedClef[0];
+                                                  else {
+                                                    globals.selectedClef[0]=!globals.selectedClef[0];
+                                                    globals.selectedClef[1]=!globals.selectedClef[1];
+                                                  }
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child:Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: ColorFiltered(
+                                                    colorFilter: ColorFilter.mode(
+                                                      toggleForegroundColor(globals.selectedClef[0]),
+                                                        BlendMode.srcIn
+                                                    ),
+                                                    child: Image.asset(
+                                                      'assets/icons/treble-clef.png',
+                                                      height: 50,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
+                                        )
+                                    ),
+                                    Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(4, 8, 8, 8),
+                                          child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              side: MaterialStateProperty.resolveWith<BorderSide>(
+                                                      (Set<MaterialState> states) {
+                                                    return BorderSide(
+                                                      color: globals.color('button') as Color,
+                                                      width: 2.0,
+                                                    );
+                                                  },
+                                              ),
+                                              backgroundColor: MaterialStateProperty.all<Color>(toggleBackgroundColor(globals.selectedClef[1])),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                if(globals.selectedClef[0]) globals.selectedClef[1]=!globals.selectedClef[1];
+                                                else {
+                                                  globals.selectedClef[0]=!globals.selectedClef[0];
+                                                  globals.selectedClef[1]=!globals.selectedClef[1];
+                                                }
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(8, 13, 8, 13),
+                                                  child: ColorFiltered(
+                                                    colorFilter: ColorFilter.mode(
+                                                        toggleForegroundColor(globals.selectedClef[1]),
+                                                        BlendMode.srcIn
+                                                    ),
+                                                    child: Image.asset(
+                                                      'assets/icons/bass-clef.png',
+                                                      height: 40,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Card(
+                          color: globals.color('card'),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: globals.color('card'),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: globals.color('shadow') as Color,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+                                  child: Text(
+                                    messages!['included scale'] as String,
+                                    style: TextStyle(
+                                      color: globals.color('text'),
+                                    ),
+                                  ),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ToggleButtons(
+                                          onPressed: (int index) {
+                                            // All buttons are selectable.
+                                            setState(() {
+                                              globals.selectedScale[index] = !globals.selectedScale[index];
+                                            });
+                                          },
+                                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                          selectedBorderColor: globals.color('toggle border'),
+                                          selectedColor: globals.color('button text'),
+                                          fillColor: globals.color('button'),
+                                          color: globals.color('button'),
+                                          borderWidth: 2,
+                                          constraints: const BoxConstraints(
+                                            minHeight: 40.0,
+                                            minWidth: 80.0,
+                                          ),
+                                          isSelected: globals.selectedScale,
+                                          children: scaleList,
                                         ),
                                       ),
-                                    )
-                                )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

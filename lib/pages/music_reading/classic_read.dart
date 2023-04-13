@@ -31,7 +31,7 @@ int notePosition = 0;
 bool trebleClef = randomClef();
 List<String> notes = randomNotes(trebleClef);
 List<int> noteColor = generateNoteColor();
-String scale = scaleByNumber(random.nextInt(14));
+String scale = randomScale();
 int checkChangeNumber = -1;
 String alert = '';
 Color alertColor = globals.color('card') as Color;
@@ -43,8 +43,7 @@ void randomOrRevision(){
     totalWeight+=note.weight;
   });
   int randomNumber = random.nextInt(totalWeight) + 1;
-  print(totalWeight);
-  print(globals.randomSheetWeight);
+
 
   randomNumber-=globals.randomSheetWeight;
   if(randomNumber<=0){
@@ -59,32 +58,37 @@ void randomOrRevision(){
 void randomSheet(){
   trebleClef = randomClef();
   notes = randomNotes(trebleClef);
-  scale = scaleByNumber(random.nextInt(14));
+  scale = randomScale();
   alert = '';
   alertColor = globals.color('card') as Color;
   noteColor = generateNoteColor();
 }
 
-void revisionSheet(){
-  int totalWeight=0;
-  globals.notesFailed.forEach((note) {totalWeight+=note.weight;});
+
+void revisionTemplate(List<failedNote> notesFailed){
+  int totalWeight = 0;
+  notesFailed.forEach((note) {
+    totalWeight += note.weight;
+  });
+  if(totalWeight == 0 ) {
+    print("The weight is 0 for some reason");
+    return randomSheet();
+  }
   int randomNumber = random.nextInt(totalWeight) + 1;
 
 
   noteAddress? selectedNote;
 
-  for (int i = 0; i < globals.notesFailed.length; i++) {
-    randomNumber -= globals.notesFailed[i].weight;
+  for (int i = 0; i < notesFailed.length; i++) {
+    randomNumber -= notesFailed[i].weight;
 
     if (randomNumber <= 0) {
-      selectedNote = globals.notesFailed[i].note;
+      selectedNote = notesFailed[i].note;
       break;
     }
   }
 
-  print('Selected note: $selectedNote');
-
-  if(selectedNote!=null) {
+  if (selectedNote != null) {
     trebleClef = selectedNote.trebleClef;
     scale = selectedNote.scale;
     notes = randomNotes(trebleClef);
@@ -92,12 +96,41 @@ void revisionSheet(){
     alert = '';
     alertColor = globals.color('card') as Color;
     noteColor = generateNoteColor();
-    noteColor[0]=3;
+    noteColor[0] = 3;
   } else {
     randomSheet();
   }
+}
 
-  print("Called a revision sheet");
+void revisionSheet(){
+  bool haveClef = revisionHaveClef();
+
+  if(globals.selectedClef[0]&&globals.selectedClef[1]){
+    List<failedNote> notesFailedWithClef = [];
+    for (int i = 0; i < globals.notesFailed.length; i++){
+      if(scaleCheck(globals.notesFailed[i].note.scale)){
+        notesFailedWithClef.add(globals.notesFailed[i]);
+      }
+    }
+    revisionTemplate(notesFailedWithClef);
+  }
+  else if(haveClef&&globals.notesFailed.isNotEmpty) {
+    List<failedNote> notesFailedWithClef = [];
+    bool clef = globals.selectedClef[0];
+    for (int i = 0; i < globals.notesFailed.length; i++){
+      if(globals.notesFailed[i].note.trebleClef==clef&&scaleCheck(globals.notesFailed[i].note.scale)){
+        notesFailedWithClef.add(globals.notesFailed[i]);
+      }
+    }
+    if(notesFailedWithClef.isNotEmpty) {
+      revisionTemplate(notesFailedWithClef);
+    }
+      else {
+      randomSheet();
+    }
+  } else {
+    randomSheet();
+  }
 }
 
 
