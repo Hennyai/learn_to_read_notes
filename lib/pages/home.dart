@@ -8,13 +8,13 @@ import 'package:learn_to_read_notes/models/choose_card.dart';
 final Map<String, Map<String, String>> docMessages = {
   'en': {
     'play': 'Start training!',
-    'play explain': 'Choose exercise',
+    'play explain': 'Read one or multiple notes on the same scale!',
     'book' : 'Read music theories',
     'book explain' : 'Learn/Review the music theory used in this program',
   },
   'vi': {
     'play': 'Bắt đầu tập luyện!',
-    'play explain': 'Chọn bài tập',
+    'play explain': 'Đọc một hoặc một số nốt nhạc trong cùng một âm giai!',
     'book' : 'Đọc nhạc lý',
     'book explain' : 'Học/ôn lại những nhạc lý sử dụng trong phần mềm'
   },
@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
             children: [
               Expanded(
                   child: GestureDetector(
-                    onTap: ()=>Navigator.pushReplacementNamed(context, '/music_reading'),
+                    onTap: ()=>Navigator.pushReplacementNamed(context, '/music_reading/classic'),
                     child: ChooseCard(CupertinoIcons.arrow_right_circle_fill, messages!['play'] as String, messages!['play explain'] as String, 'icon 1')
                   )
               ),

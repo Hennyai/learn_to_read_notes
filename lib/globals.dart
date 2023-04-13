@@ -52,7 +52,7 @@ Map<String, Map<String, Color?>> theme = {
     'incorrect' : Colors.redAccent,
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.deepPurple[50],
-    'toggle border' : Colors.purple[700]
+    'toggle border' : Colors.purple[700],
   },
   'dark' : {
     'appbar' : Colors.grey[900],
@@ -72,7 +72,7 @@ Map<String, Map<String, Color?>> theme = {
     'incorrect' : Colors.redAccent,
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.grey[900],
-    'toggle border' : Colors.grey[850]
+    'toggle border' : Colors.grey[850],
   },
 };
 

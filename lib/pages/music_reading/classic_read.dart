@@ -203,7 +203,7 @@ class _ClassicReadState extends State<ClassicRead> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/music_reading');
+              Navigator.of(context).pushReplacementNamed('/home');
             }
         ),
         actions: [

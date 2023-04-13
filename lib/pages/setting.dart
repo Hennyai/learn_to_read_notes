@@ -27,7 +27,8 @@ final Map<String, Map<String, String>> docMessages = {
     'random weight' : "Random music sheet's weight",
     'random weight explain' : "The weight slider allows you to adjust the balance between generating challenging, completely random music sheets and generating music sheets that target areas where you need to improve.",
     'included clef' : 'Included Clefs:',
-    'included scale' : 'Included Scales:'
+    'included scale' : 'Included (Major) Scales:',
+    'set to default' : 'Set to default'
   },
   'vi': {
     'title': 'Cài đặt',
@@ -45,7 +46,8 @@ final Map<String, Map<String, String>> docMessages = {
     'random weight' : 'Trọng số random khung nhạc',
     'random weight explain' : "Thanh trượt trọng số cho phép bạn điều chỉnh cân bằng giữa việc tạo ra các sheet nhạc ngẫu nhiên và các sheet nhạc hướng đến những chỗ mà bạn cần cải thiện.",
     'included clef' : 'Bao gồm các khóa:',
-    'included scale' : 'Bao gồm các âm giai:'
+    'included scale' : 'Bao gồm các âm giai(trưởng):',
+    'set to default' : 'Đặt về mặc định'
   },
 };
 
@@ -66,6 +68,8 @@ List<Widget> scaleList= <Widget>[
   Text('A#'),
   Text('B'),
 ];
+
+final scaleScrollController = ScrollController();
 
 
 class Setting extends StatefulWidget {
@@ -92,6 +96,15 @@ class _SettingState extends State<Setting> {
   }
   void switchAdvanced(){
     setState(() {globals.advancedSettings=!globals.advancedSettings;});
+  }
+  void setToDefault(){
+    setState(() {
+      globals.numberOfNotes=3;
+      globals.randomSheetWeight=51;
+      globals.selectedClef[0]=true;
+      globals.selectedClef[1]=true;
+      globals.selectedScale.fillRange(0, globals.selectedScale.length-1,true);
+    });
   }
 
   Color toggleBackgroundColor(bool check){
@@ -178,6 +191,35 @@ class _SettingState extends State<Setting> {
                   child: Column(
                     children: [
                       NumberPicker(),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          side: MaterialStateProperty.resolveWith<BorderSide>(
+                                (Set<MaterialState> states) {
+                              return BorderSide(
+                                color: globals.color('button') as Color,
+                                width: 3.0,
+                              );
+                            },
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              globals.color('button text') as Color),
+                          foregroundColor:
+                          MaterialStateProperty.all<Color>(globals.color('button') as Color),
+                          elevation: MaterialStateProperty.all<double>(3.0),
+                          shadowColor: MaterialStateProperty.all<Color>(Colors.grey),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: setToDefault,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(messages!['set to default'] as String),
+                        ),
+                      ),
+                      SizedBox(height: 5,),
                       //Random weight slider
                       Padding(
                         padding: const EdgeInsets.fromLTRB(11, 0, 11, 0),
@@ -416,7 +458,7 @@ class _SettingState extends State<Setting> {
                               ],
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
@@ -427,35 +469,59 @@ class _SettingState extends State<Setting> {
                                     ),
                                   ),
                                 ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: ToggleButtons(
-                                          onPressed: (int index) {
-                                            // All buttons are selectable.
-                                            setState(() {
-                                              globals.selectedScale[index] = !globals.selectedScale[index];
-                                            });
-                                          },
-                                          borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                          selectedBorderColor: globals.color('toggle border'),
-                                          selectedColor: globals.color('button text'),
-                                          fillColor: globals.color('button'),
-                                          color: globals.color('button'),
-                                          borderWidth: 2,
-                                          constraints: const BoxConstraints(
-                                            minHeight: 40.0,
-                                            minWidth: 80.0,
-                                          ),
-                                          isSelected: globals.selectedScale,
-                                          children: scaleList,
+                                Center(
+                                  child: Scrollbar(
+                                    thumbVisibility: true,
+                                    controller: scaleScrollController,
+                                    child: Stack(
+                                      children: [
+                                          Center(
+                                            child: SingleChildScrollView(
+                                            controller: scaleScrollController,
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: ToggleButtons(
+                                                    onPressed: (int index) {
+                                                      // All buttons are selectable.
+                                                      setState(() {
+                                                        globals.selectedScale[index] = !globals.selectedScale[index];
+                                                      });
+                                                    },
+                                                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                                    selectedBorderColor: globals.color('toggle border'),
+                                                    selectedColor: globals.color('button text'),
+                                                    fillColor: globals.color('button'),
+                                                    color: globals.color('button'),
+                                                    borderWidth: 2,
+                                                    constraints: const BoxConstraints(
+                                                      minHeight: 40.0,
+                                                      minWidth: 80.0,
+                                                    ),
+                                                    isSelected: globals.selectedScale,
+                                                    children: scaleList,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                         ),
-                                      ),
-                                    ],
+                                          ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            width: 8,
+                                            height: 56,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ]
+                                    ),
                                   ),
                                 ),
                               ],
@@ -475,7 +541,8 @@ class _SettingState extends State<Setting> {
                           onTap: () =>switchLanguage(),
                           child: ChooseCard(Icons.language, messages!['language'] as String, messages!['language explain'] as String, 'icon 1' )
                       ),
-                      SizedBox(height: 20)
+                      SizedBox(height: 20),
+                      SizedBox(height: 50),
                     ],
                   ),
                 ),
@@ -550,6 +617,7 @@ class _SettingState extends State<Setting> {
                           child: ChooseCard(Icons.language, messages!['language'] as String, messages!['language explain'] as String, 'icon 1' )
                       ),
                       SizedBox(height: 20),
+
                     ],
                   ),
                 ),
