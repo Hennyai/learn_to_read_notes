@@ -99,6 +99,7 @@ class _SettingState extends State<Setting> {
   }
   void setToDefault(){
     setState(() {
+      globals.settingsChanged=true;
       globals.numberOfNotes=3;
       globals.randomSheetWeight=51;
       globals.selectedClef[0]=true;
@@ -299,6 +300,7 @@ class _SettingState extends State<Setting> {
                                     activeColor: globals.color('button') as Color,
                                     inactiveColor: globals.color('inactive slider') as Color,
                                     onChanged: (dynamic value){
+                                      globals.settingsChanged=true;
                                       setState(() {
                                         globals.randomSheetWeight = value.ceil()+1;
                                       });
@@ -359,6 +361,7 @@ class _SettingState extends State<Setting> {
                                               backgroundColor: MaterialStateProperty.all<Color>(toggleBackgroundColor(globals.selectedClef[0])),
                                             ),
                                             onPressed: (){
+                                              globals.settingsChanged=true;
                                               setState(() {
                                                 if(globals.selectedClef[1]) globals.selectedClef[0]=!globals.selectedClef[0];
                                                   else {
@@ -404,6 +407,7 @@ class _SettingState extends State<Setting> {
                                               backgroundColor: MaterialStateProperty.all<Color>(toggleBackgroundColor(globals.selectedClef[1])),
                                             ),
                                             onPressed: () {
+                                              globals.settingsChanged=true;
                                               setState(() {
                                                 if(globals.selectedClef[0]) globals.selectedClef[1]=!globals.selectedClef[1];
                                                 else {
@@ -486,6 +490,7 @@ class _SettingState extends State<Setting> {
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: ToggleButtons(
                                                     onPressed: (int index) {
+                                                      globals.settingsChanged=true;
                                                       // All buttons are selectable.
                                                       setState(() {
                                                         globals.selectedScale[index] = !globals.selectedScale[index];
@@ -512,10 +517,10 @@ class _SettingState extends State<Setting> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Container(
-                                            width: 8,
+                                            width: 10,
                                             height: 56,
                                             decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: globals.color('card'),
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                           ),

@@ -87,7 +87,6 @@ class _SheetMusicState extends State<SheetMusic> {
     } else {
       int overflowNumber = ((totalWidth-screenWidth)/(getNoteWidth()*imageHeight/globals.sheetMusicSize)).ceil();
       int numberOfNotes = notes.length-overflowNumber;
-      print("number of notes: $numberOfNotes");
       int currentLine = notePosition == 0 ? 1 : (notePosition/numberOfNotes).ceil();
       int totalLine = (notes.length/numberOfNotes).ceil();
 

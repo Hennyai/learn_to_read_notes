@@ -5,6 +5,8 @@ import 'models/note_address.dart';
 List<failedNote> notesFailed = [];
 bool hideNoteNames = true;
 
+bool settingsChanged = false;
+
 bool advancedSettings = false;
 final List<bool> selectedClef = <bool>[
   true,//treble
@@ -53,6 +55,8 @@ Map<String, Map<String, Color?>> theme = {
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.deepPurple[50],
     'toggle border' : Colors.purple[700],
+    'natural key' : Colors.white,
+    'accidental key' : Colors.black,
   },
   'dark' : {
     'appbar' : Colors.grey[900],
@@ -73,6 +77,8 @@ Map<String, Map<String, Color?>> theme = {
     'revision' : Colors.amberAccent,
     'inactive slider' : Colors.grey[900],
     'toggle border' : Colors.grey[850],
+    'natural key' : Colors.grey[400],
+    'accidental key' : Colors.black,
   },
 };
 

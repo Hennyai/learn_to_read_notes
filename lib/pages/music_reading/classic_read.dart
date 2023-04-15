@@ -32,10 +32,17 @@ bool trebleClef = randomClef();
 List<String> notes = randomNotes(trebleClef);
 List<int> noteColor = generateNoteColor();
 String scale = randomScale();
-int checkChangeNumber = -1;
+
 String alert = '';
 Color alertColor = globals.color('card') as Color;
 
+bool checkChangeSetting(){
+  if (globals.settingsChanged) {
+    globals.settingsChanged=false;
+    return true;
+  }
+  return false;
+}
 
 void randomOrRevision(){
   int totalWeight = globals.randomSheetWeight;
@@ -77,15 +84,9 @@ void revisionTemplate(List<failedNote> notesFailed){
   notesFailed.forEach((note) {
     totalWeight += note.weight;
   });
-  if(totalWeight == 0 ) {
-    print("The weight is 0 for some reason");
-    return randomSheet();
-  }
   int randomNumber = random.nextInt(totalWeight) + 1;
 
-
   noteAddress? selectedNote;
-
   for (int i = 0; i < notesFailed.length; i++) {
     randomNumber -= notesFailed[i].weight;
 
@@ -151,8 +152,6 @@ class _ClassicReadState extends State<ClassicRead> {
       notePosition = 0;
     };
 
-
-
     Map<String, String>? messages = docMessages[globals.language];
     return Scaffold(
       appBar: AppBar(
@@ -172,9 +171,8 @@ class _ClassicReadState extends State<ClassicRead> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              showDialog(context: context, builder: (BuildContext context){return Setting();}).then((value) => setState(() {
-                if (checkChangeNumber!=globals.numberOfNotes) {
-                  checkChangeNumber=globals.numberOfNotes;
+              showDialog(context: context, builder: (BuildContext context){return const Setting();}).then((value) => setState(() {
+                if (checkChangeSetting()) {
                   randomOrRevision();
                   notePosition = 0;
                   noteColor = generateNoteColor();
@@ -222,8 +220,8 @@ class _ClassicReadState extends State<ClassicRead> {
             child: InteractivePiano(
               hideNoteNames: globals.hideNoteNames,
               hideScrollbar: true,
-              naturalColor: Colors.white,
-              accidentalColor: Colors.black,
+              naturalColor: globals.color('natural key') as Color,
+              accidentalColor: globals.color('accidental key') as Color,
               keyWidth: MediaQuery.of(context).size.width / 7,
               noteRange: NoteRange(NotePosition(note: Note.C, octave: 3), NotePosition(note: Note.B, octave: 3)),
               onNotePositionTapped: (position) {
@@ -234,26 +232,18 @@ class _ClassicReadState extends State<ClassicRead> {
 
 
                 if(notePosition<globals.numberOfNotes){
-                  //print(noteName);
-                  //print(getNoteName(scale, notes[notePosition]));
-
-                  //print(compareNotes(noteName, getNoteName(scale, notes[notePosition])));
-
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
                     //Correct:
                     checkPassed(noteAddress(trebleClef, scale, notes[notePosition]));
                     noteColor[notePosition]=1;
                     alert = getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('correct') as Color;
-                    //print(globals.notesFailed);
                   } else {
-                    //Incorrect
+                    //Incorrect:
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
                     noteColor[notePosition]=2;
                     alert = messages['alert']!+getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('incorrect') as Color;
-                    //print(globals.notesFailed);
-                    //revisionSheet();
                   }
                 }
 
