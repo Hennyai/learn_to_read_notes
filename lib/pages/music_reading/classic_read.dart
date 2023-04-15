@@ -44,15 +44,12 @@ void randomOrRevision(){
   });
   int randomNumber = random.nextInt(totalWeight) + 1;
 
-
   randomNumber-=globals.randomSheetWeight;
   if(randomNumber<=0){
     return randomSheet();
   } else {
     return revisionSheet();
   }
-
-
 }
 
 void randomSheet(){
@@ -64,8 +61,18 @@ void randomSheet(){
   noteColor = generateNoteColor();
 }
 
+void revisionSheet(){
+  if(globals.selectedClef[0]&&globals.selectedClef[1]){
+    revisionTemplate(globals.notesFailed.where((element) => (scaleCheck(element.note.scale))).toList());
+  }
+  else {
+    revisionTemplate(globals.notesFailed.where((element) => (element.note.trebleClef==globals.selectedClef[0]&&scaleCheck(element.note.scale))).toList());
+  }
+}
 
 void revisionTemplate(List<failedNote> notesFailed){
+  if(notesFailed.isEmpty) return randomSheet();
+
   int totalWeight = 0;
   notesFailed.forEach((note) {
     totalWeight += note.weight;
@@ -102,63 +109,18 @@ void revisionTemplate(List<failedNote> notesFailed){
   }
 }
 
-void revisionSheet(){
-  bool haveClef = revisionHaveClef();
-
-  if(globals.selectedClef[0]&&globals.selectedClef[1]){
-    List<failedNote> notesFailedWithClef = [];
-    for (int i = 0; i < globals.notesFailed.length; i++){
-      if(scaleCheck(globals.notesFailed[i].note.scale)){
-        notesFailedWithClef.add(globals.notesFailed[i]);
-      }
-    }
-    revisionTemplate(notesFailedWithClef);
-  }
-  else if(haveClef&&globals.notesFailed.isNotEmpty) {
-    List<failedNote> notesFailedWithClef = [];
-    bool clef = globals.selectedClef[0];
-    for (int i = 0; i < globals.notesFailed.length; i++){
-      if(globals.notesFailed[i].note.trebleClef==clef&&scaleCheck(globals.notesFailed[i].note.scale)){
-        notesFailedWithClef.add(globals.notesFailed[i]);
-      }
-    }
-    if(notesFailedWithClef.isNotEmpty) {
-      revisionTemplate(notesFailedWithClef);
-    }
-      else {
-      randomSheet();
-    }
-  } else {
-    randomSheet();
-  }
-}
-
 
 void checkFailed(noteAddress noteFailed){
-  bool contain = false;
-
-  for (var i = 0; i < globals.notesFailed.length; i++) {
-    var e = globals.notesFailed[i];
-    if (e.note.equals(noteFailed)) {
-      e.weight++;
-      contain = true;
-      break;
-    }
-  }
-
-  if(!contain)  globals.notesFailed.add(failedNote(noteFailed, 1));
+  int indexOfNote = globals.notesFailed.indexWhere((element) => element.note.equals(noteFailed));
+  if(indexOfNote>=0)  globals.notesFailed[indexOfNote].weight++;
+    else globals.notesFailed.add(failedNote(noteFailed, 1));
 }
 
 void checkPassed(noteAddress notePassed){
-  for (var i = 0; i < globals.notesFailed.length; i++) {
-    var e = globals.notesFailed[i];
-    if (e.note.equals(notePassed)) {
-      if(e.weight>1){
-        e.weight--;
-      } else {
-        globals.notesFailed.removeAt(i);
-      }
-    }
+  int indexOfNote = globals.notesFailed.indexWhere((element) => element.note.equals(notePassed));
+  if(indexOfNote>=0){
+    if(globals.notesFailed[indexOfNote].weight>1) globals.notesFailed[indexOfNote].weight--;
+      else globals.notesFailed.removeAt(indexOfNote);
   }
 }
 

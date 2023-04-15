@@ -69,49 +69,55 @@ class ScaleInfo {
       case "C Major":
       case "A Minor":
         return PossibleScales.cMajor;
-      case "G Major":
-      case "E Minor":
-        return PossibleScales.gMajor;
-      case "D Major":
-      case "B Minor":
-        return PossibleScales.dMajor;
-      case "A Major":
-      case "F# Minor":
-      case "F♯ Minor":
-        return PossibleScales.aMajor;
-      case "E Major":
-      case "C# Minor":
-      case "C♯ Minor":
-        return PossibleScales.eMajor;
-      case "B Major":
-      case "G# Minor":
-      case "G♯ Minor":
-        return PossibleScales.bMajor;
-      case "F# Major":
-      case "F♯ Major":
-      case "D# Minor":
-      case "D♯ Minor":
-        return PossibleScales.fSMajor;
       case "C# Major":
       case "C♯ Major":
       case "A# Minor":
       case "A♯ Minor":
         return PossibleScales.cSMajor;
-      case "F Major":
-      case "D Minor":
-        return PossibleScales.fMajor;
-      case "Bb Major":
-      case "B♭ Major":
-      case "G Minor":
-        return PossibleScales.bbMajor;
+      case "D Major":
+      case "B Minor":
+        return PossibleScales.dMajor;
+      case "D# Major":
+      case "D♯ Major":
       case "Eb Major":
       case "E♭ Major":
       case "C Minor":
         return PossibleScales.ebMajor;
+      case "E Major":
+      case "C# Minor":
+      case "C♯ Minor":
+        return PossibleScales.eMajor;
+      case "F Major":
+      case "D Minor":
+        return PossibleScales.fMajor;
+      case "F# Major":
+      case "F♯ Major":
+      case "D# Minor":
+      case "D♯ Minor":
+        return PossibleScales.fSMajor;
+      case "G Major":
+      case "E Minor":
+        return PossibleScales.gMajor;
+      case "G# Major":
+      case "G♯ Major":
       case "Ab Major":
       case "A♭ Major":
       case "F Minor":
         return PossibleScales.abMajor;
+      case "A Major":
+      case "F# Minor":
+      case "F♯ Minor":
+        return PossibleScales.aMajor;
+      case "A# Major":
+      case "A♯ Major":
+      case "Bb Major":
+      case "B♭ Major":
+      case "G Minor":
+        return PossibleScales.bbMajor;
+      case "B Major":
+      case "G# Minor":
+      case "G♯ Minor":
+        return PossibleScales.bMajor;
       case "Db Major":
       case "D♭ Major":
       case "B♭ Minor":
@@ -160,14 +166,7 @@ bool scaleCheck(String name){
 }
 
 String randomScale(){
-  bool checkAllFalse = true;
-  for(int i = 0; i<globals.selectedScale.length;i++){
-    if(globals.selectedScale[i]){
-      checkAllFalse=false;
-      break;
-    }
-  }
-  if(checkAllFalse) return scaleByNumber(0);
+  if(!globals.selectedScale.contains(true)) return scaleByNumber(0);
   final random = Random();
   int chosenNumber = random.nextInt(12);
   while(!globals.selectedScale[chosenNumber]){
