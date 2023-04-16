@@ -57,6 +57,9 @@ int noteNameToNumber(String name, bool trebleClef){
   return pitchesBass.indexOf(name);
 }
 
+String sharpToSharp(String noteName){
+  return noteName.replaceAll('♯', 'sharp');
+}
 
 
 List<String> randomNotes(bool trebleClef){
@@ -89,6 +92,10 @@ bool compareNotes(String note1, String note2){
     case "A♭G♯": return true;
     case "A♯B♭": return true;
     case "B♭A♯": return true;
+    case "B♯C": return true;
+    case "CB♯": return true;
+    case "E♯F": return true;
+    case "FE♯": return true;
   }
   return false;
 }

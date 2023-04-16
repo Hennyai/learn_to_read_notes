@@ -28,7 +28,10 @@ final Map<String, Map<String, String>> docMessages = {
     'random weight explain' : "The weight slider allows you to adjust the balance between generating challenging, completely random music sheets and generating music sheets that target areas where you need to improve.",
     'included clef' : 'Included Clefs:',
     'included scale' : 'Included (Major) Scales:',
-    'set to default' : 'Set to default'
+    'set to default' : 'Set to default',
+    'clear' : 'Clear',
+    'choose all' : 'Choose all',
+    'volume' : 'Volume:'
   },
   'vi': {
     'title': 'Cài đặt',
@@ -47,7 +50,10 @@ final Map<String, Map<String, String>> docMessages = {
     'random weight explain' : "Thanh trượt trọng số cho phép bạn điều chỉnh cân bằng giữa việc tạo ra các sheet nhạc ngẫu nhiên và các sheet nhạc hướng đến những chỗ mà bạn cần cải thiện.",
     'included clef' : 'Bao gồm các khóa:',
     'included scale' : 'Bao gồm các âm giai(trưởng):',
-    'set to default' : 'Đặt về mặc định'
+    'set to default' : 'Đặt về mặc định',
+    'clear' : 'Bỏ chọn',
+    'choose all' : 'Chọn tất cả',
+    'volume' : 'Âm lượng:'
   },
 };
 
@@ -124,6 +130,12 @@ class _SettingState extends State<Setting> {
     IconData noteNamesIcon;
     String noteNamesTitle;
     String noteNamesExplain;
+    String clearOrChooseString;
+
+    int scaleCount = globals.selectedScale.where((element) => element).toList().length;
+    if(scaleCount>6) clearOrChooseString=messages!['clear'] as String;
+      else clearOrChooseString=messages!['choose all'] as String;
+
     if(globals.currentTheme=='dark') themeIcon = Icons.dark_mode;
       else themeIcon = Icons.light_mode;
     if(globals.hideNoteNames){
@@ -134,6 +146,14 @@ class _SettingState extends State<Setting> {
       noteNamesIcon = CupertinoIcons.piano;
       noteNamesTitle = messages!['hide note names'] as String;
       noteNamesExplain = messages!['hide note explain'] as String;
+    }
+
+    void clearOrChoose(){
+      setState(() {
+        globals.settingsChanged=true;
+        if(scaleCount>6) globals.selectedScale.fillRange(0, globals.selectedScale.length, false);
+          else globals.selectedScale.fillRange(0, globals.selectedScale.length, true);
+      });
     }
 
 
@@ -192,6 +212,62 @@ class _SettingState extends State<Setting> {
                   child: Column(
                     children: [
                       NumberPicker(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(11, 0, 11, 0),
+                        child: Card(
+                          color: globals.color('card'),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: globals.color('card'),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: globals.color('shadow') as Color,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 6),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
+                                    child: Text(
+                                      messages!["volume"] as String,
+                                      style: TextStyle(
+                                          color: globals.color("text")
+                                      ),
+                                    ),
+                                  ),
+                                  SfSlider(
+                                    min: 0.0,
+                                    max: 100.0,
+                                    value: globals.volume*100,
+                                    interval: 20,
+                                    showTicks: true,
+                                    showLabels: false,
+                                    enableTooltip: true,
+                                    minorTicksPerInterval: 1,
+                                    activeColor: globals.color('button') as Color,
+                                    inactiveColor: globals.color('inactive slider') as Color,
+                                    onChanged: (dynamic value){
+                                      globals.settingsChanged=true;
+                                      setState(() {
+                                        globals.volume = value.ceil()/100;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height:8),
                       ElevatedButton(
                         style: ButtonStyle(
                           side: MaterialStateProperty.resolveWith<BorderSide>(
@@ -465,12 +541,35 @@ class _SettingState extends State<Setting> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
-                                  child: Text(
-                                    messages!['included scale'] as String,
-                                    style: TextStyle(
-                                      color: globals.color('text'),
-                                    ),
+                                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                        child: Text(
+                                          messages!['included scale'] as String,
+                                          style: TextStyle(
+                                            color: globals.color('text'),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all<Color>(globals.color('button') as Color),
+                                            foregroundColor: MaterialStateProperty.all<Color>(globals.color('button text') as Color),
+                                          ),
+                                          onPressed: clearOrChoose,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              clearOrChooseString
+                                            ),
+                                          ),
+                                        )
+                                      ),
+                                    ]
                                   ),
                                 ),
                                 Center(
@@ -609,6 +708,61 @@ class _SettingState extends State<Setting> {
                   child: Column(
                     children: [
                       NumberPicker(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(11, 0, 11, 0),
+                        child: Card(
+                          color: globals.color('card'),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: globals.color('card'),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: globals.color('shadow') as Color,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 0, 6),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
+                                    child: Text(
+                                      messages!["volume"] as String,
+                                      style: TextStyle(
+                                          color: globals.color("text")
+                                      ),
+                                    ),
+                                  ),
+                                  SfSlider(
+                                    min: 0.0,
+                                    max: 100.0,
+                                    value: globals.volume*100,
+                                    interval: 20,
+                                    showTicks: true,
+                                    showLabels: false,
+                                    enableTooltip: true,
+                                    minorTicksPerInterval: 1,
+                                    activeColor: globals.color('button') as Color,
+                                    inactiveColor: globals.color('inactive slider') as Color,
+                                    onChanged: (dynamic value){
+                                      globals.settingsChanged=true;
+                                      setState(() {
+                                        globals.volume = value.ceil()/100;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       GestureDetector(
                           onTap: () => switchNoteNames(),
                           child: ChooseCard(noteNamesIcon, noteNamesTitle, noteNamesExplain, 'icon 1')

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:learn_to_read_notes/globals.dart' as globals;
@@ -32,6 +33,7 @@ bool trebleClef = randomClef();
 List<String> notes = randomNotes(trebleClef);
 List<int> noteColor = generateNoteColor();
 String scale = randomScale();
+final audioPlayer = AudioPlayer();
 
 String alert = '';
 Color alertColor = globals.color('card') as Color;
@@ -140,9 +142,6 @@ class ClassicRead extends StatefulWidget {
 
 
 class _ClassicReadState extends State<ClassicRead> {
-
-
-
   @override
   Widget build(BuildContext context) {
     double fontSize = min(20, MediaQuery.of(context).size.height/20);
@@ -151,6 +150,8 @@ class _ClassicReadState extends State<ClassicRead> {
       randomOrRevision();
       notePosition = 0;
     };
+
+    audioPlayer.setVolume(globals.volume);
 
     Map<String, String>? messages = docMessages[globals.language];
     return Scaffold(
@@ -234,12 +235,16 @@ class _ClassicReadState extends State<ClassicRead> {
                 if(notePosition<globals.numberOfNotes){
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
                     //Correct:
+                    audioPlayer.play(AssetSource('audio/'+sharpToSharp(noteName)+'.wav'));
+
                     checkPassed(noteAddress(trebleClef, scale, notes[notePosition]));
                     noteColor[notePosition]=1;
                     alert = getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('correct') as Color;
                   } else {
                     //Incorrect:
+                    audioPlayer.play(AssetSource('audio/Wrong_answer.mp3'));
+
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
                     noteColor[notePosition]=2;
                     alert = messages['alert']!+getNoteName(scale, notes[notePosition]);

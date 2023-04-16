@@ -5,6 +5,8 @@ import 'models/note_address.dart';
 List<failedNote> notesFailed = [];
 bool hideNoteNames = true;
 
+double volume = 0.5;
+
 bool settingsChanged = false;
 
 bool advancedSettings = false;

@@ -9,14 +9,14 @@ final Map<String, Map<String, String>> docMessages = {
   'en': {
     'play': 'Start training!',
     'play explain': 'Read one or multiple notes on the same scale!',
-    'book' : 'Read music theories',
-    'book explain' : 'Learn/Review the music theory used in this program',
+    'scale' : 'Find scale name',
+    'scale explain' : 'Find scale name by entering the number and type of key signatures',
   },
   'vi': {
     'play': 'Bắt đầu tập luyện!',
     'play explain': 'Đọc một hoặc một số nốt nhạc trong cùng một âm giai!',
-    'book' : 'Đọc nhạc lý',
-    'book explain' : 'Học/ôn lại những nhạc lý sử dụng trong phần mềm'
+    'scale' : 'Tìm tên âm giai',
+    'scale explain' : 'Tìm tên âm giai bằng cách nhập số lượng và chọn loại dấu hóa'
   },
 };
 
@@ -73,7 +73,12 @@ class _HomeState extends State<Home> {
                     child: ChooseCard(CupertinoIcons.arrow_right_circle_fill, messages!['play'] as String, messages!['play explain'] as String, 'icon 1')
                   )
               ),
-              Expanded(child: ChooseCard(CupertinoIcons.book, messages!['book'] as String, messages!['book explain'] as String, 'icon 1' )),
+              Expanded(
+                  child: GestureDetector(
+                    onTap: ()=>Navigator.pushReplacementNamed(context, '/scale_finder'),
+                    child: ChooseCard(CupertinoIcons.book, messages!['scale'] as String, messages!['scale explain'] as String, 'icon 1' )
+                  )
+              ),
               SizedBox(height: 20)
             ],
           ),
