@@ -62,17 +62,20 @@ Map<String, String>? messages = docMessages[globals.language];
 
 List<Widget> scaleList= <Widget>[
   Text('C'),
-  Text('C#'),
-  Text('D'),
-  Text('D#'),
-  Text('E'),
-  Text('F'),
-  Text('F#'),
   Text('G'),
-  Text('G#'),
+  Text('D'),
   Text('A'),
-  Text('A#'),
+  Text('E'),
   Text('B'),
+  Text('F#'),
+  Text('C#'),
+  Text('F'),
+  Text('Bb'),
+  Text('Eb'),
+  Text('Ab'),
+  Text('Db'),
+  Text('Gb'),
+  Text('Cb'),
 ];
 
 final scaleScrollController = ScrollController();
@@ -133,7 +136,7 @@ class _SettingState extends State<Setting> {
     String clearOrChooseString;
 
     int scaleCount = globals.selectedScale.where((element) => element).toList().length;
-    if(scaleCount>6) clearOrChooseString=messages!['clear'] as String;
+    if(scaleCount>scaleList.length/2) clearOrChooseString=messages!['clear'] as String;
       else clearOrChooseString=messages!['choose all'] as String;
 
     if(globals.currentTheme=='dark') themeIcon = Icons.dark_mode;

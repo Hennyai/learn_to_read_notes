@@ -5,17 +5,20 @@ import 'package:learn_to_read_notes/globals.dart' as globals;
 
 List<String> scaleList = [
   "C Major",
-  "C# Major",
-  "D Major",
-  "D# Major",
-  "E Major",
-  "F Major",
-  "F# Major",
   "G Major",
-  "G# Major",
+  "D Major",
   "A Major",
-  "A# Major",
+  "E Major",
   "B Major",
+  "F# Major",
+  "C# Major",
+  "F Major",
+  "Bb Major",
+  "Eb Major",
+  "Ab Major",
+  "Db Major",
+  "Gb Major",
+  "Cb Major",
 ];
 
 enum PossibleScales {
@@ -168,9 +171,9 @@ bool scaleCheck(String name){
 String randomScale(){
   if(!globals.selectedScale.contains(true)) return scaleByNumber(0);
   final random = Random();
-  int chosenNumber = random.nextInt(12);
+  int chosenNumber = random.nextInt(scaleList.length);
   while(!globals.selectedScale[chosenNumber]){
-    chosenNumber = random.nextInt(12);
+    chosenNumber = random.nextInt(scaleList.length);
   }
   return scaleByNumber(chosenNumber);
 }

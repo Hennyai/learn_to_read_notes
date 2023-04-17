@@ -74,6 +74,8 @@ flutter:
     #Icon
     - assets/icons/bass-clef.png
     - assets/icons/treble-clef.png
+    - assets/icons/flat.png
+    - assets/icons/sharp.png
 
     # Clef
     - assets/images/clef/treble_clef.png

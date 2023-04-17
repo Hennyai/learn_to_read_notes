@@ -10,13 +10,13 @@ final Map<String, Map<String, String>> docMessages = {
     'play': 'Start training!',
     'play explain': 'Read one or multiple notes on the same scale!',
     'scale' : 'Find scale name',
-    'scale explain' : 'Find scale name by entering the number and type of key signatures',
+    'scale explain' : 'Find major scale by entering the number and type of key signatures',
   },
   'vi': {
     'play': 'Bắt đầu tập luyện!',
     'play explain': 'Đọc một hoặc một số nốt nhạc trong cùng một âm giai!',
     'scale' : 'Tìm tên âm giai',
-    'scale explain' : 'Tìm tên âm giai bằng cách nhập số lượng và chọn loại dấu hóa'
+    'scale explain' : 'Tìm tên âm giai trưởng bằng cách nhập số lượng và chọn loại dấu hóa'
   },
 };
 
@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               showDialog(context: context, builder: (BuildContext context){return Setting();}).then((value) => setState(() {}));
             },
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
                     child: ChooseCard(CupertinoIcons.book, messages!['scale'] as String, messages!['scale explain'] as String, 'icon 1' )
                   )
               ),
-              SizedBox(height: 20)
+              const SizedBox(height: 20)
             ],
           ),
         ]

@@ -14,18 +14,21 @@ final List<bool> selectedClef = <bool>[
   true,//treble
   true];//bass
 List<bool> selectedScale = <bool>[
-  true, //C
-  true, //C#
-  true, //D
-  true, //D#
-  true, //E
-  true, //F
-  true, //F#
-  true, //G
-  true, //G#
-  true, //A
-  true, //A#
-  true, //B
+  true, //cMajor,
+  true, //gMajor,
+  true, //dMajor,
+  true, //aMajor,
+  true, //eMajor,
+  true, //bMajor,
+  true, //fSMajor,
+  true, //cSMajor,
+  true, //fMajor,
+  true, //bbMajor,
+  true, //ebMajor,
+  true, //abMajor,
+  true, //dbMajor,
+  true, //gbMajor,
+  true, //cbMajor,
 ];
 
 String language = 'en';

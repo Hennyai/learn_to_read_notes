@@ -47,6 +47,7 @@ bool checkChangeSetting(){
 }
 
 void randomOrRevision(){
+  print(globals.notesFailed);
   int totalWeight = globals.randomSheetWeight;
   globals.notesFailed.forEach((note) {
     totalWeight+=note.weight;
@@ -154,6 +155,7 @@ class _ClassicReadState extends State<ClassicRead> {
     audioPlayer.setVolume(globals.volume);
 
     Map<String, String>? messages = docMessages[globals.language];
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -172,16 +174,22 @@ class _ClassicReadState extends State<ClassicRead> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              showDialog(context: context, builder: (BuildContext context){return const Setting();}).then((value) => setState(() {
-                if (checkChangeSetting()) {
-                  randomOrRevision();
-                  notePosition = 0;
-                  noteColor = generateNoteColor();
+              showDialog(context: context, builder: (BuildContext context){return const Setting();}).then((value) {
+                messages = docMessages[globals.language];
+                if(alert.length>5){
+                  alert = messages!['alert']!+getNoteName(scale, notes[notePosition]);
                 }
-                if(notePosition==0){
-                  alertColor = globals.color('card') as Color;
-                }
-              }));
+                setState(() {
+                  if (checkChangeSetting()) {
+                    randomOrRevision();
+                    notePosition = 0;
+                    noteColor = generateNoteColor();
+                  }
+                  if(notePosition==0){
+                    alertColor = globals.color('card') as Color;
+                  }
+                });
+              });
             },
             color: globals.color('icon 1'),
           ),
@@ -247,7 +255,7 @@ class _ClassicReadState extends State<ClassicRead> {
 
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
                     noteColor[notePosition]=2;
-                    alert = messages['alert']!+getNoteName(scale, notes[notePosition]);
+                    alert = messages!['alert']!+getNoteName(scale, notes[notePosition]);
                     alertColor = globals.color('incorrect') as Color;
                   }
                 }
