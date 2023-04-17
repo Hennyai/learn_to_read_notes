@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:learn_to_read_notes/globals.dart' as globals;
 import 'package:learn_to_read_notes/models/scale.dart';
 import 'package:learn_to_read_notes/pages/setting.dart';
@@ -47,7 +46,6 @@ bool checkChangeSetting(){
 }
 
 void randomOrRevision(){
-  print(globals.notesFailed);
   int totalWeight = globals.randomSheetWeight;
   globals.notesFailed.forEach((note) {
     totalWeight+=note.weight;

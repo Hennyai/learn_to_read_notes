@@ -8,14 +8,17 @@ final Map<String, Map<String, String>> docMessages = {
   'en': {
     'title' : 'Find the scale',
     'dropdown title' : 'Number of key signatures: ',
-    'key signature' : 'Key signature type:'
+    'key signature' : 'Key signature type:',
+    'alternative' : 'Relative scale: '
   },
   'vi': {
     'title' : 'Tìm âm giai',
     'dropdown title' : 'Số lượng dấu hóa: ',
-    'key signature' : 'Loại dấu hóa:'
+    'key signature' : 'Loại dấu hóa:',
+    'alternative' : 'Âm giai tương thích: '
   },
 };
+Map<String, String>? messages = docMessages[globals.language];
 
 class ScaleFinder extends StatefulWidget {
   const ScaleFinder({Key? key}) : super(key: key);
@@ -42,7 +45,7 @@ class _ScaleFinderState extends State<ScaleFinder> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String>? messages = docMessages[globals.language];
+    messages = docMessages[globals.language];
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -83,7 +86,7 @@ class _ScaleFinderState extends State<ScaleFinder> {
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 12,),
+                SizedBox(height: 50,),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Card(
@@ -152,7 +155,7 @@ class _ScaleFinderState extends State<ScaleFinder> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                //Included clef
+                //Included signature
                 Padding(
                   padding: const EdgeInsets.fromLTRB(11, 0, 11, 0),
                   child: Card(
@@ -275,7 +278,37 @@ class _ScaleFinderState extends State<ScaleFinder> {
                   ),
                 ),
                 SizedBox(height:12),
-                ScaleAnswer()
+                Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Card(
+                    color: globals.color('card'),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: globals.color('card'),
+                        boxShadow: [
+                          BoxShadow(
+                            color: globals.color('shadow') as Color,
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          scaleAnswer(_selectedNumber, selectedSignature[0]),
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: globals.color('text'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           )
@@ -285,68 +318,46 @@ class _ScaleFinderState extends State<ScaleFinder> {
   }
 }
 
-
-class ScaleAnswer extends StatelessWidget {
-  const ScaleAnswer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(12.0),
-      child: Card(
-        color: globals.color('card'),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: globals.color('card'),
-            boxShadow: [
-              BoxShadow(
-                color: globals.color('shadow') as Color,
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Tawawa",
-              style: TextStyle(
-                fontSize: 30,
-                color: globals.color('text')
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+String scaleAnswer(int numberOfSignature, bool signature){
+  if(signature){
+    switch(numberOfSignature) {
+      case 0:
+        return "C Major\n" + (messages!['alternative'] as String) + "A Minor";
+      case 1:
+        return "G Major\n" + (messages!['alternative'] as String) + "E Minor";
+      case 2:
+        return "D Major\n" + (messages!['alternative'] as String) + "B Minor";
+      case 3:
+        return "A Major\n" + (messages!['alternative'] as String) + "F# Minor";
+      case 4:
+        return "E Major\n" + (messages!['alternative'] as String) + "C# Minor";
+      case 5:
+        return "B Major\n" + (messages!['alternative'] as String) + "G# Minor";
+      case 6:
+        return "F# Major\n" + (messages!['alternative'] as String) + "D# Minor";
+      case 7:
+        return "C# Major\n" + (messages!['alternative'] as String) + "A# Minor";
+    }
+    return("");
+  } else {
+    switch (numberOfSignature) {
+      case 0:
+        return "C Major\n" + (messages!['alternative'] as String) + "A Minor";
+      case 1:
+        return "F Major\n" + (messages!['alternative'] as String) + "D Minor";
+      case 2:
+        return "Bb Major\n" + (messages!['alternative'] as String) + "G Minor";
+      case 3:
+        return "Eb Major\n" + (messages!['alternative'] as String) + "C Minor";
+      case 4:
+        return "Ab Major\n" + (messages!['alternative'] as String) + "F Minor";
+      case 5:
+        return "Db Major\n" + (messages!['alternative'] as String) + "Bb Minor";
+      case 6:
+        return "Gb Major\n" + (messages!['alternative'] as String) + "Eb Minor";
+      case 7:
+        return "Cb Major\n" + (messages!['alternative'] as String) + "Ab Minor";
+    }
+    return ("");
   }
 }
-
-// String scaleAnswer(int numberOfSignature, bool signature){
-//   if(signature){
-//     switch(numberOfSignature){
-//       case 0: return ;
-//       case 1: return ;
-//       case 2: return ;
-//       case 3: return ;
-//       case 4: return ;
-//       case 5: return ;
-//       case 6: return ;
-//       case 7: return ;
-//     }
-//     return("");
-//   } else {
-//     switch(numberOfSignature){
-//       case 0: return ;
-//       case 1: return ;
-//       case 2: return ;
-//       case 3: return ;
-//       case 4: return ;
-//       case 5: return ;
-//       case 6: return ;
-//       case 7: return ;
-//   }
-//     return("");
-// }
