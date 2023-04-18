@@ -32,7 +32,6 @@ bool trebleClef = randomClef();
 List<String> notes = randomNotes(trebleClef);
 List<int> noteColor = generateNoteColor();
 String scale = randomScale();
-final audioPlayer = AudioPlayer();
 
 String alert = '';
 Color alertColor = globals.color('card') as Color;
@@ -150,7 +149,6 @@ class _ClassicReadState extends State<ClassicRead> {
       notePosition = 0;
     };
 
-    audioPlayer.setVolume(globals.volume);
 
     Map<String, String>? messages = docMessages[globals.language];
 
@@ -241,7 +239,8 @@ class _ClassicReadState extends State<ClassicRead> {
                 if(notePosition<globals.numberOfNotes){
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
                     //Correct:
-                    audioPlayer.pause;
+                    final audioPlayer = AudioPlayer();
+                    audioPlayer.setVolume(globals.volume);
                     audioPlayer.play(AssetSource('audio/'+sharpToSharp(noteName)+'.wav'));
 
                     checkPassed(noteAddress(trebleClef, scale, notes[notePosition]));
@@ -250,7 +249,8 @@ class _ClassicReadState extends State<ClassicRead> {
                     alertColor = globals.color('correct') as Color;
                   } else {
                     //Incorrect:
-                    audioPlayer.pause;
+                    final audioPlayer = AudioPlayer();
+                    audioPlayer.setVolume(globals.volume);
                     audioPlayer.play(AssetSource('audio/Wrong_answer.mp3'));
 
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));
