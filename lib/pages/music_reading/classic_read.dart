@@ -1,10 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
-import 'package:learn_to_read_notes/models/scale.dart';
-import 'package:learn_to_read_notes/pages/setting.dart';
-import 'package:learn_to_read_notes/util/notes.dart';
-import 'package:learn_to_read_notes/util/pitch_asset.dart';
+import 'package:note_anki/globals.dart' as globals;
+import 'package:note_anki/models/scale.dart';
+import 'package:note_anki/pages/setting.dart';
+import 'package:note_anki/util/notes.dart';
+import 'package:note_anki/util/pitch_asset.dart';
 import 'package:piano/piano.dart';
 import 'dart:math';
 
@@ -241,6 +241,7 @@ class _ClassicReadState extends State<ClassicRead> {
                 if(notePosition<globals.numberOfNotes){
                   if(compareNotes(noteName, getNoteName(scale, notes[notePosition]))){
                     //Correct:
+                    audioPlayer.pause;
                     audioPlayer.play(AssetSource('audio/'+sharpToSharp(noteName)+'.wav'));
 
                     checkPassed(noteAddress(trebleClef, scale, notes[notePosition]));
@@ -249,6 +250,7 @@ class _ClassicReadState extends State<ClassicRead> {
                     alertColor = globals.color('correct') as Color;
                   } else {
                     //Incorrect:
+                    audioPlayer.pause;
                     audioPlayer.play(AssetSource('audio/Wrong_answer.mp3'));
 
                     checkFailed(noteAddress(trebleClef, scale, notes[notePosition]));

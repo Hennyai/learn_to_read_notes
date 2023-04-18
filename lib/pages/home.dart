@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
-import 'package:learn_to_read_notes/pages/setting.dart';
-import 'package:learn_to_read_notes/models/choose_card.dart';
+import 'package:note_anki/globals.dart' as globals;
+import 'package:note_anki/pages/setting.dart';
+import 'package:note_anki/models/choose_card.dart';
 
 //Danh sách message
 final Map<String, Map<String, String>> docMessages = {

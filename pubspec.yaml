@@ -1,4 +1,4 @@
-name: learn_to_read_notes
+name: note_anki
 description: Niên luận cơ sở ngành
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -76,6 +76,8 @@ flutter:
     - assets/icons/treble-clef.png
     - assets/icons/flat.png
     - assets/icons/sharp.png
+    - assets/icons/appIcon.png
+    - assets/icons/appIcon_nobg.png
 
     # Clef
     - assets/images/clef/treble_clef.png

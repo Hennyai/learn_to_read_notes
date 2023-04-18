@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:note_anki/globals.dart' as globals;
 
 const List<String> pitchesTreble = <String>[
   "G3",

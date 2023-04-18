@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
-import 'package:learn_to_read_notes/pages/music_reading/classic_read.dart';
-import 'package:learn_to_read_notes/util/clef_asset.dart';
-import 'package:learn_to_read_notes/util/pitch_asset.dart';
+import 'package:note_anki/globals.dart' as globals;
+import 'package:note_anki/pages/music_reading/classic_read.dart';
+import 'package:note_anki/util/clef_asset.dart';
+import 'package:note_anki/util/pitch_asset.dart';
 
 import '../util/scale_asset.dart';
 

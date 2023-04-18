@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
-import 'package:learn_to_read_notes/pages/setting.dart';
+import 'package:note_anki/globals.dart' as globals;
+import 'package:note_anki/pages/setting.dart';
 
 
 //Danh sách message

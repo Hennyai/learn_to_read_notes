@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nhat.b2003847.learn_to_read_notes">
    <application
-        android:label="learn_to_read_notes"
+        android:label="Note Anki"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

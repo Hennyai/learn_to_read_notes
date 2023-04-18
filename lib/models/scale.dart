@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:tonic/tonic.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:note_anki/globals.dart' as globals;
 
 List<String> scaleList = [
   "C Major",

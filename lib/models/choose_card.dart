@@ -1,4 +1,4 @@
-import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:note_anki/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learn_to_read_notes/pages/home.dart';
-import 'package:learn_to_read_notes/pages/music_reading/classic_read.dart';
-import 'package:learn_to_read_notes/pages/music_reading/music_reading.dart';
-import 'package:learn_to_read_notes/pages/scale_finder.dart';
+import 'package:note_anki/pages/home.dart';
+import 'package:note_anki/pages/music_reading/classic_read.dart';
+import 'package:note_anki/pages/music_reading/music_reading.dart';
+import 'package:note_anki/pages/scale_finder.dart';
 
 
 

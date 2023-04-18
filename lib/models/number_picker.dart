@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:note_anki/globals.dart' as globals;
 
 final Map<String, Map<String, String>> docMessages = {
   'en': {

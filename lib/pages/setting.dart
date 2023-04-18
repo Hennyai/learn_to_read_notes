@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:info_popup/info_popup.dart';
-import 'package:learn_to_read_notes/globals.dart' as globals;
+import 'package:note_anki/globals.dart' as globals;
 
-import 'package:learn_to_read_notes/models/choose_card.dart';
+import 'package:note_anki/models/choose_card.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../models/number_picker.dart';
