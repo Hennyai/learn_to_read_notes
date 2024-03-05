@@ -1,16 +1,1 @@
-# learn_to_read_notes
-
-Niên luận cơ sở ngành
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A cross-platform(mobile, web, and desktop) music training app using Flutter with flexible design, support for light and dark themes, and bilingual support. The app is designed to train people to read music notes and sight-read, and supports two clefs and all major and minor keys with complex note calculation.
